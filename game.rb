@@ -36,7 +36,8 @@ class GameWindow < Hasu::Window
 
   class Snake
   def initialize
-    @image = Gosu::Image.new("media/snake.png")
+  	@body_link = Gosu::Image.new("media/snake.png")
+    @snake_body = [@body_link, @body_link]
     @x = @y = @vel_x = @angle = 0.0
     @vel_y = -1.0
     @score = 0
@@ -47,27 +48,31 @@ class GameWindow < Hasu::Window
   end
 
   def turn_left
-    @angle -= 12
+    @angle -= 10
   end
 
   def turn_right
-    @angle += 12
+    @angle += 10
   end
 
   def move
-  	@vel_x = Gosu::offset_x(@angle, 1)
-    @vel_y = Gosu::offset_y(@angle, 1)
-    @x += @vel_x
-    @y += @vel_y
-    @x %= 640
-    @y %= 480
-
-    @vel_x *= 1
-    @vel_y *= 1
+	@count = 0
+  	@snake_body.each do |link|
+  		@vel_x = Gosu::offset_x(@angle, 1)
+	    @vel_y = Gosu::offset_y(@angle, 1)
+	    @x += @vel_x
+	    @y += @vel_y
+	    @x %= 640
+	    @y %= 480
+  	end  
   end
 
   def draw
-    @image.draw_rot(@x, @y, 1, @angle)
+  	@count = 0
+  	@snake_body.each do |link|
+  		link.draw_rot(@x, @y + @count * 20, 1, @angle)
+  		@count += 1
+  	end   
   end
 end
 end
